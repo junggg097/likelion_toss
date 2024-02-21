@@ -1,6 +1,7 @@
 package com.example.toss.service;
 
 import com.example.toss.dto.ItemOrderDto;
+import com.example.toss.dto.PaymentCancelDto;
 import com.example.toss.dto.PaymentConfirmDto;
 import com.example.toss.entity.Item;
 import com.example.toss.entity.ItemOrder;
@@ -74,5 +75,20 @@ public class OrderService {
         log.info(response.toString());
         // 3. 해당 결제 정보 반환
         return response;
+    }
+
+    // cancelPayment
+    public Object cancelPayment(
+            Long id,
+            PaymentCancelDto dto) {
+        // 1. 취소할 주문을 찾는다.
+        ItemOrder order = orderRepository.findById(id)
+                .orElseThrow(()->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        // 2. 주문 정보를 갱신한다.
+        order.setStatus("CANCEL");
+        // 3. 취소 후 결과 응답한다.
+        return tossService.cancelPayment(order.getTossPaymentKey(), dto);
     }
 }
