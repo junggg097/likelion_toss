@@ -29,4 +29,13 @@ public class OrderController {
     ) {
         return service.readOne(id);
     }
+
+    @GetMapping("{id}/payment")
+    public Object readTossPayment(
+            @PathVariable("id")
+            Long id
+    ) {
+        return service.readTossPayment(id);
+    }
+
 }
